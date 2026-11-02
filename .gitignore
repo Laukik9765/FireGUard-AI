@@ -42,3 +42,4 @@ left_label.jpg
 
 # Graphify backups (keep current graph.json / graph.html / GRAPH_REPORT.md)
 graphify-out/20*
+
