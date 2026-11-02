@@ -1,0 +1,9 @@
+# FireGuard AI — YOLOv8 Dataset Configuration
+path: C:/Users/lauki/OneDrive/Desktop/fireguard AI/datasets/fireguard_data
+train: images/train
+val: images/val
+
+names:
+  0: fire
+  1: smoke
+  2: person

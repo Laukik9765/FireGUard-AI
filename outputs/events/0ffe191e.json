@@ -1,0 +1,13 @@
+{
+  "event_id": "0ffe191e",
+  "started_at": "2026-09-27T03:12:54.136484+00:00",
+  "ended_at": "2026-09-27T03:12:57.150212+00:00",
+  "peak_hazard": "MODERATE",
+  "fire_confirmed": false,
+  "smoke_confirmed": true,
+  "max_people": 1,
+  "max_livestock": 0,
+  "peak_density": 50.8,
+  "frame_count": 15,
+  "closed": true
+}

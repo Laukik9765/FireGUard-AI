@@ -1,0 +1,13 @@
+{
+  "event_id": "5ef45e38",
+  "started_at": "2026-11-01T23:03:40.389524+00:00",
+  "ended_at": null,
+  "peak_hazard": "HIGH",
+  "fire_confirmed": true,
+  "smoke_confirmed": false,
+  "max_people": 1,
+  "max_livestock": 0,
+  "peak_density": 0.0,
+  "frame_count": 12,
+  "closed": false
+}

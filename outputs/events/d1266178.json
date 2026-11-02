@@ -1,0 +1,13 @@
+{
+  "event_id": "d1266178",
+  "started_at": "2026-11-02T04:16:17.228527+00:00",
+  "ended_at": "2026-11-02T04:16:18.827071+00:00",
+  "peak_hazard": "LOW",
+  "fire_confirmed": false,
+  "smoke_confirmed": false,
+  "max_people": 0,
+  "max_livestock": 1,
+  "peak_density": 0.0,
+  "frame_count": 1,
+  "closed": true
+}

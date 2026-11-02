@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="FireGuard AI — Fire &amp; Smoke Situational Awareness System. Vision-language open-vocabulary hazard detection and real-time incident monitoring." />
+  <title>FireGuard AI — Fire &amp; Smoke Situational Awareness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ══════════════════════════════════════════════════════════
+       HEADER BAR
+  ═══════════════════════════════════════════════════════════ -->
+  <header class="header">
+    <div class="header-brand">
+      <div class="brand-crest">
+        <!-- Flame emblem inside shield -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="crest-svg" aria-hidden="true">
+          <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z" stroke="currentColor" fill="rgba(229, 45, 39, 0.2)"/>
+          <path d="M12 7c-1.5 2-3 3.5-3 6a3 3 0 0 0 6 0c0-2.5-1.5-4-3-6z" fill="#ef233c" stroke="none"/>
+        </svg>
+      </div>
+      <div class="brand-meta">
+        <span class="brand-title">FireGuard AI</span>
+        <span class="brand-sub">Fire &amp; Smoke Situational Awareness</span>
+      </div>
+    </div>
+
+    <!-- Center System Status Pill -->
+    <div class="header-center">
+      <div class="system-status-pill online" id="sys-status-pill">
+        <span class="status-pulse-dot"></span>
+        <span id="status-label">System Online</span>
+      </div>
+    </div>
+
+    <!-- Header Right Controls -->
+    <div class="header-right">
+      <!-- Notification bell with badge -->
+      <button class="icon-btn header-action-btn" id="btn-notifications" title="Notifications" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="notif-badge">1</span>
+      </button>
+
+      <!-- Fullscreen button -->
+      <button class="icon-btn header-action-btn" id="btn-fullscreen" title="Toggle Fullscreen" aria-label="Toggle Fullscreen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+        </svg>
+      </button>
+
+      <!-- Settings button -->
+      <button class="icon-btn header-action-btn" id="btn-header-settings" title="Settings" aria-label="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+
+      <!-- User Avatar -->
+      <div class="user-avatar" title="Commander LC">LC</div>
+
+      <!-- Clock & Date -->
+      <div class="header-clock-block">
+        <span class="clock-time" id="clock-time">13:37:52</span>
+        <span class="clock-date" id="clock-date">Fri, 31 Oct 2026</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SIDEBAR NAVIGATION
+  ═══════════════════════════════════════════════════════════ -->
+  <nav class="sidebar" role="navigation" aria-label="Main Navigation">
+    <div class="sidebar-menu">
+      <button class="nav-item active" data-page="live" id="nav-live">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+        </svg>
+        <span>Live Monitor</span>
+      </button>
+
+      <button class="nav-item" data-page="file-analysis" id="nav-file-analysis">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span>File Analysis</span>
+      </button>
+
+      <button class="nav-item" data-page="events" id="nav-events">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span>Events &amp; Alerts</span>
+      </button>
+
+      <button class="nav-item" data-page="history" id="nav-history">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        <span>Incident History</span>
+      </button>
+
+      <button class="nav-item" data-page="reports" id="nav-reports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <span>Reports</span>
+      </button>
+
+      <button class="nav-item" data-page="settings" id="nav-settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        <span>Settings</span>
+      </button>
+    </div>
+
+    <!-- Atmospheric Sidebar Bottom Graphic -->
+    <div class="sidebar-footer">
+      <div class="mountain-graphic"></div>
+      <div class="sidebar-version">v1.0.0</div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════════
+       MAIN CONTENT CONTAINER
+  ═══════════════════════════════════════════════════════════ -->
+  <main class="main" role="main">
+
+    <!-- ──────────────────────────────────────────────────────────
+         PAGE 1: LIVE MONITOR
+    ─────────────────────────────────────────────────────────── -->
+    <div class="page active" id="page-live">
+      <div class="page-topbar">
+        <div>
+          <h1 class="page-heading">Live Surveillance &amp; Situational Awareness</h1>
+          <p class="page-subheading">Real-time edge neural inference for fire, smoke, occupancy, and combustible hazards.</p>
+        </div>
+        <div class="topbar-actions">
+          <select id="camera-select" class="dropdown-select" aria-label="Select camera source">
+            <option value="1">Camera 1 (Iriun Webcam)</option>
+            <option value="0">Camera 0 (Default Camera)</option>
+            <option value="2">Camera 2 (Lab CCTV)</option>
+            <option value="-1">Simulated CCTV Feed</option>
+          </select>
+          <button class="btn btn-primary" id="btn-start-cam">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Start Camera
+          </button>
+          <button class="btn btn-danger hidden" id="btn-stop-cam">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12"/></svg>
+            Stop
+          </button>
+        </div>
+      </div>
+
+      <div class="live-grid">
+        <!-- Live Video Viewport -->
+        <div class="live-viewport-card">
+          <div class="viewport-header">
+            <div class="viewport-tags">
+              <span class="live-indicator-badge" id="cam-badge-live">STANDBY</span>
+              <span class="live-fps-badge" id="cam-badge-fps"></span>
+            </div>
+            <div class="viewport-cam-label" id="cam-viewport-label">Camera 1 - Main Surveillance Feed</div>
+            <div class="viewport-actions">
+              <button class="icon-btn small" id="btn-snapshot-cam" title="Capture Snapshot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
+              <button class="icon-btn small" id="btn-expand-cam" title="Fullscreen Stream"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+            </div>
+          </div>
+
+          <div class="viewport-screen">
+            <img id="camera-img" class="camera-feed hidden" alt="Annotated live camera stream" />
+            <div class="camera-placeholder" id="camera-placeholder">
+              <div class="placeholder-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="2" y="6" width="20" height="14" rx="2"/>
+                  <circle cx="12" cy="13" r="3"/>
+                  <path d="M8 6V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1"/>
+                </svg>
+              </div>
+              <h3>Camera Stream Inactive</h3>
+              <p>Select a video capture device or simulated feed above and click <strong>Start Camera</strong>.</p>
+            </div>
+          </div>
+
+          <!-- Bottom Hazard Scale Bar -->
+          <div class="viewport-hazard-bar">
+            <div class="hazard-level-group">
+              <span class="hazard-label">HAZARD STATUS</span>
+              <span class="hazard-pill hazard-NORMAL" id="hazard-value">NORMAL</span>
+            </div>
+
+            <div class="hazard-gauge" id="hazard-gauge" title="Visual Threat Scale: Normal -> Low -> Moderate -> High -> Critical">
+              <div class="gauge-step step-normal active" data-lvl="NORMAL" title="Normal - Safe"></div>
+              <div class="gauge-step step-low" data-lvl="LOW" title="Low Warning"></div>
+              <div class="gauge-step step-moderate" data-lvl="MODERATE" title="Moderate Danger"></div>
+              <div class="gauge-step step-high" data-lvl="HIGH" title="High Danger"></div>
+              <div class="gauge-step step-critical" data-lvl="CRITICAL" title="Critical Emergency"></div>
+            </div>
+
+            <div class="hazard-trend-group">
+              <span id="hazard-trend">Smoke trend: —</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side Live Telemetry Cards -->
+        <div class="live-telemetry-col">
+          <!-- Fire Card -->
+          <div class="telemetry-card card-fire">
+            <div class="telemetry-card-title">FIRE</div>
+            <div class="telemetry-card-value state-normal" id="stat-fire">—</div>
+            <div class="telemetry-card-sub" id="stat-fire-sub">Combustion thermal gradient</div>
+          </div>
+
+          <!-- Smoke Card -->
+          <div class="telemetry-card card-smoke">
+            <div class="telemetry-card-title">SMOKE</div>
+            <div class="telemetry-card-value state-normal" id="stat-smoke">—</div>
+            <div class="telemetry-metrics-list">
+              <span id="stat-smoke-density">Density: —</span>
+              <span id="stat-smoke-coverage">Coverage: —</span>
+              <span id="stat-smoke-trend">Trend: —</span>
+            </div>
+          </div>
+
+          <!-- People Card -->
+          <div class="telemetry-card card-people">
+            <div class="telemetry-card-title">PEOPLE</div>
+            <div class="telemetry-card-value cyan" id="stat-people">0</div>
+            <div class="telemetry-card-sub">Visible in frame</div>
+          </div>
+
+          <!-- Livestock / Hazards Card -->
+          <div class="telemetry-card card-hazards">
+            <div class="telemetry-card-title">LIVESTOCK / HAZARDS</div>
+            <div class="telemetry-card-value amber" id="stat-livestock">0</div>
+            <div class="telemetry-card-sub">Animals or hazards visible</div>
+          </div>
+
+          <!-- Alert Notification Card -->
+          <div class="telemetry-card card-alert" id="card-alert">
+            <div class="telemetry-card-title flex-between">
+              <span>ALERT STATUS</span>
+              <span id="stat-alert-time" class="mono-time"></span>
+            </div>
+            <div class="alert-title state-normal" id="stat-alert-title">NO ACTIVE ALERTS</div>
+            <div class="alert-desc" id="stat-alert-msg">All parameters within normal thresholds.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ──────────────────────────────────────────────────────────
+         PAGE 2: INCIDENT HISTORY (Exact design from Image 1)
+    ─────────────────────────────────────────────────────────── -->
+    <div class="page" id="page-history">
+      <div class="page-topbar">
+        <div class="page-title-with-icon">
+          <div class="page-icon-square red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="page-heading">Incident History</h1>
+            <p class="page-subheading">Stored record of detected fire, smoke, and hazard incidents</p>
+          </div>
+        </div>
+
+        <div class="topbar-filters">
+          <div class="dropdown-filter-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>01 Oct 2026 – 31 Oct 2026</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="incident-search" placeholder="Search by ID, camera, or type..." />
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Stat Summary 4 Cards Row -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap red-fire">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c0 0-3 4-3 7a3 3 0 0 0 6 0c0-3-3-7-3-7z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93V18c0-.55-.45-1-1-1s-1 .45-1 1v1.93C7.05 19.44 3.56 15.95 3.07 12H5c.55 0 1-.45 1-1s-.45-1-1-1H3.07C3.56 6.05 7.05 2.56 11 2.07V4c0 .55.45 1 1 1s1-.45 1-1V2.07c3.95.49 7.44 3.98 7.93 7.93H19c-.55 0-1 .45-1 1s.45 1 1 1h1.93c-.49 3.95-3.98 7.44-7.93 7.93z" opacity="0.3"/></svg>
+          </div>
+          <div class="kpi-content">
+            <div class="kpi-number">12</div>
+            <div class="kpi-title">Total Incidents</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap red-smoke">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+          </div>
+          <div class="kpi-content">
+            <div class="kpi-number">8</div>
+            <div class="kpi-title">Smoke Incidents</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap amber-hazard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="kpi-content">
+            <div class="kpi-number">3</div>
+            <div class="kpi-title">Hazard Incidents</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap cyan-people">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="kpi-content">
+            <div class="kpi-number">1</div>
+            <div class="kpi-title">People at Risk</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Split: Table Left, Details Panel Right -->
+      <div class="incident-split-layout">
+        <!-- Incidents Table Card -->
+        <div class="incidents-table-card">
+          <div class="table-responsive">
+            <table class="data-table" id="incidents-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Date &amp; Time</th>
+                  <th>Camera / Location</th>
+                  <th>Incident Type</th>
+                  <th>Severity</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="incidents-tbody">
+                <!-- Rows injected dynamically via JS; pre-seeded to match Image 1 -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-pagination-footer">
+            <div class="entries-select">
+              Show <select id="select-entries"><option>8</option><option>15</option><option>25</option></select> entries
+            </div>
+            <div class="pagination-buttons">
+              <button class="page-nav-btn">&lsaquo;</button>
+              <button class="page-num-btn active">1</button>
+              <button class="page-num-btn">2</button>
+              <button class="page-nav-btn">&rsaquo;</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Incident Details Panel Card -->
+        <div class="incident-detail-card" id="incident-detail-panel">
+          <div class="detail-header">
+            <div class="detail-header-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="detail-icon"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+              <h2>Incident Details</h2>
+            </div>
+            <span class="incident-id-badge" id="detail-inc-id">ID: INC-0142</span>
+          </div>
+
+          <!-- Video / Frame Snapshot with Annotation Boxes -->
+          <div class="detail-preview-container">
+            <span class="preview-cam-tag" id="detail-cam-tag">Camera 1 – Main Hall</span>
+            <div class="preview-media-box">
+              <img id="detail-preview-img" src="/static/img/yolo_detection.jpg" alt="Incident Snapshot" />
+              <!-- Bounding Box Overlays -->
+              <div class="overlay-box box-smoke" style="top:22%; left:48%; width:34%; height:42%;">
+                <span class="box-tag tag-smoke">Smoke (0.88)</span>
+              </div>
+              <div class="overlay-box box-person" style="top:40%; left:27%; width:9%; height:38%;">
+                <span class="box-tag tag-person">Person (0.94)</span>
+              </div>
+              <div class="overlay-box box-person" style="top:42%; left:38%; width:8%; height:32%;">
+                <span class="box-tag tag-person">Person (0.91)</span>
+              </div>
+              <div class="overlay-box box-lpg" style="top:58%; left:85%; width:10%; height:28%;">
+                <span class="box-tag tag-lpg">LPG Cylinder (0.93)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metadata & Detection Summary Row -->
+          <div class="detail-meta-row">
+            <div class="meta-column">
+              <div class="meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <div>
+                  <span class="meta-label">Date &amp; Time</span>
+                  <span class="meta-val" id="detail-datetime">31 Oct 2026, 13:37:41</span>
+                </div>
+              </div>
+              <div class="meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <div>
+                  <span class="meta-label">Camera / Location</span>
+                  <span class="meta-val" id="detail-location">Camera 1 – Main Hall</span>
+                </div>
+              </div>
+              <div class="meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c0 0-3 4-3 7a3 3 0 0 0 6 0c0-3-3-7-3-7z"/></svg>
+                <div>
+                  <span class="meta-label">Incident Type</span>
+                  <span class="meta-val" id="detail-type">Smoke</span>
+                </div>
+              </div>
+              <div class="meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <div>
+                  <span class="meta-label">Severity</span>
+                  <span class="badge badge-high" id="detail-severity">High</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dark Detection Summary Card -->
+            <div class="detection-summary-box">
+              <div class="summary-box-title">Detection Summary</div>
+              <div class="summary-stat-line">
+                <div class="stat-bullet red"></div>
+                <span class="stat-name">Smoke Level</span>
+                <span class="stat-highlight red" id="detail-smoke-score">0.88 (Heavy)</span>
+              </div>
+              <div class="summary-stat-line">
+                <div class="stat-bullet cyan"></div>
+                <span class="stat-name">People Detected</span>
+                <span class="stat-highlight cyan" id="detail-people-count">2</span>
+              </div>
+              <div class="summary-stat-line">
+                <div class="stat-bullet amber"></div>
+                <span class="stat-name">Hazards Detected</span>
+                <span class="stat-highlight amber" id="detail-hazard-count">1 (LPG Cylinder)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="detail-actions-row">
+            <button class="btn btn-primary" id="btn-view-video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> View Video</button>
+            <button class="btn btn-secondary" id="btn-download-clip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download Clip</button>
+            <button class="btn btn-secondary" id="btn-export-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Export Report (PDF)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ──────────────────────────────────────────────────────────
+         PAGE 3: FILE ANALYSIS (Exact design from Image 3)
+    ─────────────────────────────────────────────────────────── -->
+    <div class="page" id="page-file-analysis">
+      <div class="page-topbar">
+        <div class="page-title-with-icon">
+          <div class="page-icon-square red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <div>
+            <h1 class="page-heading">File Analysis</h1>
+            <p class="page-subheading">Upload an image or video file to analyze for smoke, hazards, and occupancy.</p>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <span class="status-pill-green" id="file-analysis-status">
+            <span class="pill-dot"></span>
+            Analysis Completed
+          </span>
+        </div>
+      </div>
+
+      <div class="file-analysis-grid">
+        <!-- Left: Upload & Options Column -->
+        <div class="file-analysis-left-col">
+          <!-- Upload Box -->
+          <div class="card upload-card">
+            <div class="upload-dropzone" id="file-dropzone">
+              <div class="upload-cloud-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                  <polyline points="12 13 12 9 10 11"/>
+                  <line x1="12" y1="9" x2="14" y2="11"/>
+                </svg>
+              </div>
+              <h3>Upload File for Analysis</h3>
+              <p>Drag &amp; drop an image or video here, or click to browse</p>
+              <button class="btn btn-primary" id="btn-choose-file">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                Choose File
+              </button>
+              <input type="file" id="file-analysis-input" class="hidden" accept=".jpg,.jpeg,.png,.webp,.mp4,.avi,.mov,.mkv" />
+              <div class="upload-formats-hint">Supported formats: JPG, PNG, MP4, AVI, MOV<br>Max file size: 500 MB</div>
+            </div>
+
+            <!-- Uploaded file chip -->
+            <div class="uploaded-chip hidden" id="uploaded-chip">
+              <div class="chip-thumb">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              </div>
+              <div class="chip-meta">
+                <div class="chip-filename" id="chip-filename">No file selected</div>
+                <div class="chip-details" id="chip-details">—</div>
+              </div>
+              <button class="icon-btn small chip-remove" id="btn-remove-file" title="Remove file">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Options Card -->
+          <div class="card options-card">
+            <div class="card-heading">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83-2.83l.06-.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              <span>Analysis Options</span>
+            </div>
+            <div class="checkbox-group">
+              <label class="custom-checkbox">
+                <input type="checkbox" id="opt-smoke" checked />
+                <span class="checkmark"></span>
+                <span>Smoke Detection &amp; Level</span>
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" id="opt-hazard" checked />
+                <span class="checkmark"></span>
+                <span>Hazard Detection (Fire, LPG, Electrical, etc.)</span>
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" id="opt-people" checked />
+                <span class="checkmark"></span>
+                <span>People Detection &amp; Counting</span>
+              </label>
+            </div>
+            <button class="btn btn-primary full-width" id="btn-analyze-file">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Analyze File
+            </button>
+          </div>
+        </div>
+
+        <!-- Center: Video Player & Detections -->
+        <div class="file-analysis-center-col">
+          <div class="card player-card">
+            <div class="player-header">
+              <div class="player-header-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Analysis Result</span>
+              </div>
+              <div class="player-header-meta" id="player-header-meta">
+                Ready for Analysis &nbsp;|&nbsp; Upload an image or video to begin
+              </div>
+            </div>
+
+            <!-- Video Player Display with Annotations -->
+            <div class="video-container" id="analysis-video-box">
+              <img id="analysis-preview-frame" src="/static/img/yolo_detection.jpg" alt="Analyzed frame preview" />
+
+              <!-- Video Controls Bar -->
+              <div class="video-controls-bar">
+                <button class="player-control-btn" id="btn-player-play"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="4" x2="6" y2="20"/><line x1="18" y1="4" x2="18" y2="20"/></svg></button>
+                <span class="player-timestamp" id="player-time-display">00:00 / 00:00</span>
+                <div class="player-timeline-slider">
+                  <div class="slider-filled" style="width: 0%;"></div>
+                  <div class="slider-thumb" style="left: 0%;"></div>
+                </div>
+                <button class="player-control-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>
+                <button class="player-control-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+              </div>
+            </div>
+          </div>
+
+            <!-- Detection Summary 4 Cards Row -->
+            <div class="card detection-summary-row-card">
+              <div class="card-heading">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l9 4.9V17L12 22 3 17V6.9z"/></svg>
+                <span>Detection Summary</span>
+              </div>
+              <div class="four-stat-row">
+                <div class="stat-cell">
+                  <div class="stat-cell-icon red-smoke"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+                  <div class="stat-cell-label">Smoke Level</div>
+                  <div class="stat-cell-val" id="summary-smoke-level">—</div>
+                </div>
+                <div class="stat-cell">
+                  <div class="stat-cell-icon cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+                  <div class="stat-cell-label">People Detected</div>
+                  <div class="stat-cell-val cyan" id="summary-people-count">0</div>
+                </div>
+                <div class="stat-cell">
+                  <div class="stat-cell-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>
+                  <div class="stat-cell-label">Hazards Detected</div>
+                  <div class="stat-cell-val amber" id="summary-hazard-count">0</div>
+                </div>
+                <div class="stat-cell">
+                  <div class="stat-cell-icon red-fire"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c0 0-3 4-3 7a3 3 0 0 0 6 0c0-3-3-7-3-7z"/></svg></div>
+                  <div class="stat-cell-label">Fire Status</div>
+                  <div class="stat-cell-val" id="summary-fire-status">None</div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <!-- Right: Smoke Analysis Gauge & Hazards -->
+        <div class="file-analysis-right-col">
+          <!-- Circular Gauge Card -->
+          <div class="card smoke-gauge-card">
+            <div class="card-heading">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+              <span>Smoke Analysis</span>
+            </div>
+
+            <div class="circular-gauge-wrapper">
+              <!-- Radial SVG Arc Gauge -->
+              <svg viewBox="0 0 140 100" class="radial-gauge-svg">
+                <path d="M 15 90 A 55 55 0 1 1 125 90" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="12" stroke-linecap="round"/>
+                <path d="M 15 90 A 55 55 0 1 1 15 90" id="analysis-gauge-path" fill="none" stroke="rgba(0, 230, 118, 0.6)" stroke-width="12" stroke-linecap="round" class="radial-progress-glow"/>
+              </svg>
+              <div class="gauge-inner-content">
+                <span class="gauge-score-number" id="analysis-gauge-score">0.00</span>
+                <span class="gauge-score-label">Smoke Score</span>
+              </div>
+            </div>
+
+            <div class="gauge-metrics-breakdown">
+              <div class="breakdown-row">
+                <span class="breakdown-lbl">Level:</span>
+                <span class="badge badge-low" id="analysis-smoke-level-badge">None</span>
+              </div>
+              <div class="breakdown-row">
+                <span class="breakdown-lbl">Density:</span>
+                <span class="breakdown-val" id="analysis-smoke-density">—</span>
+              </div>
+              <div class="breakdown-row">
+                <span class="breakdown-lbl">Coverage:</span>
+                <span class="breakdown-val" id="analysis-smoke-coverage">—</span>
+              </div>
+              <div class="breakdown-row">
+                <span class="breakdown-lbl">Trend:</span>
+                <span class="breakdown-val" id="analysis-smoke-trend">—</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detected Hazards Card -->
+          <div class="card detected-hazards-card">
+            <div class="card-heading">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+              <span>Detected Hazards</span>
+            </div>
+            <div class="hazard-list-item" id="analysis-hazard-item">
+              <div class="hazard-item-icon-cylinder" id="analysis-hazard-icon" style="color: #00e676; background: rgba(0, 230, 118, 0.15);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+              </div>
+              <div class="hazard-item-info">
+                <span class="hazard-item-title" id="analysis-hazard-title">No Combustible Hazards</span>
+                <span class="hazard-item-conf" id="analysis-hazard-conf">All parameters safe</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Frame Timeline Card -->
+          <div class="card timeline-chart-card">
+            <div class="card-heading">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <span>Frame Timeline (Smoke Level)</span>
+            </div>
+            <div class="timeline-svg-wrapper" id="timeline-svg-box">
+              <svg viewBox="0 0 260 100" class="timeline-line-svg" id="timeline-line-svg">
+                <!-- Grid Lines -->
+                <line x1="30" y1="15" x2="255" y2="15" stroke="rgba(255,255,255,0.06)" stroke-dasharray="2,2"/>
+                <line x1="30" y1="40" x2="255" y2="40" stroke="rgba(255,255,255,0.06)" stroke-dasharray="2,2"/>
+                <line x1="30" y1="65" x2="255" y2="65" stroke="rgba(255,255,255,0.06)" stroke-dasharray="2,2"/>
+                <line x1="30" y1="85" x2="255" y2="85" stroke="rgba(255,255,255,0.1)"/>
+                
+                <!-- Y Labels -->
+                <text x="5" y="18" fill="#58677f" font-size="9" font-family="monospace">1.0</text>
+                <text x="5" y="43" fill="#58677f" font-size="9" font-family="monospace">0.6</text>
+                <text x="5" y="68" fill="#58677f" font-size="9" font-family="monospace">0.2</text>
+                <text x="5" y="88" fill="#58677f" font-size="9" font-family="monospace">0.0</text>
+
+                <!-- Trend Line & Dots -->
+                <polyline id="timeline-polyline" points="35,85 245,85" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+                <g id="timeline-dots"></g>
+              </svg>
+              <div class="timeline-x-labels" id="timeline-x-labels">
+                <span>00:00</span>
+                <span>—</span>
+                <span>—</span>
+                <span>—</span>
+                <span>00:00</span>
+              </div>
+            </div>
+          </div>
+            <div class="timeline-svg-wrapper" id="timeline-svg-box">
+              <svg viewBox="0 0 260 100" class="timeline-line-svg" id="timeline-line-svg">
+                <!-- Grid Lines -->
+                <line x1="30" y1="15" x2="255" y2="15" stroke="rgba(255,255,255,0.06)" stroke-dasharray="2,2"/>
+                <line x1="30" y1="40" x2="255" y2="40" stroke="rgba(255,255,255,0.06)" stroke-dasharray="2,2"/>
+                <line x1="30" y1="65" x2="255" y2="65" stroke="rgba(255,255,255,0.06)" stroke-dasharray="2,2"/>
+                <line x1="30" y1="85" x2="255" y2="85" stroke="rgba(255,255,255,0.1)"/>
+                
+                <!-- Y Labels -->
+                <text x="5" y="18" fill="#58677f" font-size="9" font-family="monospace">1.0</text>
+                <text x="5" y="43" fill="#58677f" font-size="9" font-family="monospace">0.6</text>
+                <text x="5" y="68" fill="#58677f" font-size="9" font-family="monospace">0.2</text>
+                <text x="5" y="88" fill="#58677f" font-size="9" font-family="monospace">0.0</text>
+
+                <!-- Trend Line & Dots -->
+                <polyline id="timeline-polyline" points="35,80 65,70 95,58 125,48 155,38 185,28 215,22 245,21" fill="none" stroke="#ef233c" stroke-width="2.5"/>
+                <g id="timeline-dots">
+                  <circle cx="35" cy="80" r="3" fill="#ef233c"/>
+                  <circle cx="65" cy="70" r="3" fill="#ef233c"/>
+                  <circle cx="95" cy="58" r="3" fill="#ef233c"/>
+                  <circle cx="125" cy="48" r="3" fill="#ef233c"/>
+                  <circle cx="155" cy="38" r="3" fill="#ef233c"/>
+                  <circle cx="185" cy="28" r="3" fill="#ef233c"/>
+                  <circle cx="215" cy="22" r="3" fill="#ef233c"/>
+                  <circle cx="245" cy="21" r="3" fill="#ef233c"/>
+                </g>
+              </svg>
+              <div class="timeline-x-labels" id="timeline-x-labels">
+                <span>00:00</span>
+                <span>00:15</span>
+                <span>00:30</span>
+                <span>00:45</span>
+                <span>01:00</span>
+                <span>01:24</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Download PDF Button -->
+          <button class="btn btn-secondary full-width" id="btn-dl-file-report">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Report (PDF)
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ──────────────────────────────────────────────────────────
+         PAGE 4: LOCATEANYTHING (Exact design from Images 4 & 5)
+    ─────────────────────────────────────────────────────────── -->
+    <div class="page" id="page-locate-anything">
+      <div class="page-topbar">
+        <div class="page-title-with-icon">
+          <!-- NVIDIA logo emblem -->
+          <div class="nvidia-logo-badge">
+            <svg viewBox="0 0 24 24" fill="#76b900"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l7 4.5-7 4.5z"/></svg>
+          </div>
+          <div>
+            <h1 class="page-heading">LocateAnything-3B Output</h1>
+            <p class="page-subheading">Open-vocabulary localization and segmentation for smoke, fire, hazards, and living beings.</p>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="pill-segmented-control">
+            <button class="seg-btn active" id="tab-localization-result">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+              Localization Result
+            </button>
+            <button class="seg-btn" id="tab-mask-view">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              Mask View
+            </button>
+          </div>
+          <button class="btn btn-secondary" id="btn-export-json">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export JSON
+          </button>
+        </div>
+      </div>
+
+      <div class="locate-grid">
+        <!-- Left Column: Video Viewport & Summary Cards -->
+        <div class="locate-left-col">
+          <div class="card locate-player-card">
+            <div class="locate-player-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              <span>Input: indoor_fire_test.mp4</span>
+            </div>
+
+            <div class="locate-video-container" id="locate-display-box">
+              <img id="locate-stream-img" src="/static/img/yolo_detection.jpg" alt="LocateAnything Inference Output" />
+              <!-- Bounding boxes matching Images 4 & 5 -->
+              <div class="overlay-box box-smoke-cyan" style="top:22%; left:28%; width:44%; height:45%;">
+                <span class="box-tag tag-cyan">smoke (0.93)</span>
+              </div>
+              <div class="overlay-box box-fire-red" style="top:52%; left:21%; width:18%; height:32%;">
+                <span class="box-tag tag-red">fire (0.97)</span>
+              </div>
+              <div class="overlay-box box-gas-yellow" style="top:62%; left:49%; width:11%; height:26%;">
+                <span class="box-tag tag-yellow">gas_cylinder 0.92</span>
+              </div>
+              <div class="overlay-box box-person-green" style="top:44%; left:67%; width:14%; height:48%;">
+                <span class="box-tag tag-green">person (0.95)</span>
+              </div>
+
+              <!-- Media Scrubber -->
+              <div class="video-controls-bar">
+                <button class="player-control-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+                <span class="player-timestamp">0:06 / 0:12</span>
+                <div class="player-timeline-slider">
+                  <div class="slider-filled" style="width: 50%;"></div>
+                  <div class="slider-thumb" style="left: 50%;"></div>
+                </div>
+                <button class="player-control-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>
+                <button class="player-control-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Scene Summary 3 Cards -->
+          <div class="card scene-summary-card">
+            <div class="card-heading">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              <span>Scene Summary</span>
+            </div>
+            <div class="scene-summary-row">
+              <div class="scene-kpi-item">
+                <div class="scene-kpi-icon cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+                <div class="scene-kpi-num cyan">1</div>
+                <div class="scene-kpi-label">People Detected</div>
+              </div>
+              <div class="scene-kpi-item">
+                <div class="scene-kpi-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+                <div class="scene-kpi-num red">Heavy</div>
+                <div class="scene-kpi-label">Smoke Level</div>
+              </div>
+              <div class="scene-kpi-item">
+                <div class="scene-kpi-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>
+                <div class="scene-kpi-num amber">1</div>
+                <div class="scene-kpi-label">Hazard Detected</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Table, Mask Overlay, JSON -->
+        <div class="locate-right-col">
+          <!-- Detection Results Table -->
+          <div class="card locate-table-card">
+            <div class="card-heading">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              <span>Detection Results (LocateAnything-3B)</span>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Object</th>
+                  <th>Confidence</th>
+                  <th>Mask Area</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="icon-dot blue-dot"></span> Smoke</td>
+                  <td class="mono-val">0.93</td>
+                  <td class="mono-val">44.8%</td>
+                </tr>
+                <tr>
+                  <td><span class="icon-dot red-dot"></span> Fire</td>
+                  <td class="mono-val">0.97</td>
+                  <td class="mono-val">6.1%</td>
+                </tr>
+                <tr>
+                  <td><span class="icon-dot green-dot"></span> Person</td>
+                  <td class="mono-val">0.95</td>
+                  <td class="mono-val">8.3%</td>
+                </tr>
+                <tr>
+                  <td><span class="icon-dot yellow-dot"></span> Gas Cylinder</td>
+                  <td class="mono-val">0.92</td>
+                  <td class="mono-val">4.7%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Segmentation Mask (Overlay) Card -->
+          <div class="card locate-mask-card">
+            <div class="card-heading">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              <span>Segmentation Mask (Overlay)</span>
+            </div>
+            <div class="mask-container">
+              <div class="mask-canvas-box">
+                <img src="/static/img/segmentation_mask.png" alt="LocateAnything Segmentation Mask" class="mask-img" />
+              </div>
+              <div class="mask-legend">
+                <div class="legend-item"><span class="legend-color-box blue"></span> Smoke</div>
+                <div class="legend-item"><span class="legend-color-box red"></span> Fire</div>
+                <div class="legend-item"><span class="legend-color-box green"></span> Person</div>
+                <div class="legend-item"><span class="legend-color-box yellow"></span> Gas Cylinder</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Model Output (JSON) Card -->
+          <div class="card locate-json-card">
+            <div class="card-heading flex-between">
+              <div class="flex-center">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                <span>Model Output (JSON)</span>
+              </div>
+              <button class="icon-btn small" id="btn-copy-json" title="Copy JSON">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+            <pre class="json-code-block" id="locate-json-display">{
+  "model": "LocateAnything-3B",
+  "objects": [
+    {"label": "smoke", "confidence": 0.93, "mask_area": 0.448},
+    {"label": "fire", "confidence": 0.97, "mask_area": 0.061},
+    {"label": "person", "confidence": 0.95, "mask_area": 0.083},
+    {"label": "gas cylinder", "confidence": 0.92, "mask_area": 0.047}
+  ]
+}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ──────────────────────────────────────────────────────────
+         PAGE 5: TELEMETRY & ANALYSIS
+    ─────────────────────────────────────────────────────────── -->
+    <div class="page" id="page-analysis">
+      <div class="page-topbar">
+        <div>
+          <h1 class="page-heading">Performance &amp; Telemetry Analysis</h1>
+          <p class="page-subheading">Inference latency, pipeline metrics, and temporal threat distribution.</p>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap red-fire"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <div class="kpi-content"><div class="kpi-number">24.8 FPS</div><div class="kpi-title">Inference Throughput</div></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap cyan-people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="kpi-content"><div class="kpi-number">40.3 ms</div><div class="kpi-title">Mean Latency</div></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap amber-hazard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+          <div class="kpi-content"><div class="kpi-number">0.0 MB</div><div class="kpi-title">VRAM Footprint</div></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap red-smoke"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div class="kpi-content"><div class="kpi-number">99.4%</div><div class="kpi-title">Precision Gate Efficacy</div></div>
+        </div>
+      </div>
+
+      <div class="card mt-4 p-4">
+        <div class="card-heading">Telemetry Metrics Breakdown</div>
+        <p style="color:var(--text-muted); font-size:13px; line-height:1.7;">
+          FireGuard utilizes a multi-gate ensemble architecture combining YOLO object localization with thermal chromaticity validation, temporal flicker frequency analysis (8–12 Hz flame flicker gating), and spatial gradient variance verification. All background frames are processed without blocking live UI rendering.
+        </p>
+      </div>
+    </div>
+
+
+    <!-- ──────────────────────────────────────────────────────────
+         PAGE 6: EVENTS & ALERTS
+    ─────────────────────────────────────────────────────────── -->
+    <div class="page" id="page-events">
+      <div class="page-topbar">
+        <div>
+          <h1 class="page-heading">Events &amp; Alert Log</h1>
+          <p class="page-subheading">Real-time incident stream and emergency response triggers.</p>
+        </div>
+        <button class="btn btn-secondary" id="btn-refresh-events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Refresh</button>
+      </div>
+
+      <div class="card p-4">
+        <div id="events-list" role="list" aria-label="Event history"></div>
+        <p id="events-empty" class="text-muted" style="font-size:13px; padding:20px; text-align:center;">No events recorded in current session.</p>
+      </div>
+    </div>
+
+
+    <!-- ──────────────────────────────────────────────────────────
+         PAGE 7: REPORTS
+    ─────────────────────────────────────────────────────────── -->
+    <div class="page" id="page-reports">
+      <div class="page-topbar">
+        <div>
+          <h1 class="page-heading">Situational Awareness Reports</h1>
+          <p class="page-subheading">Generate and download audit reports for post-incident firefighter review.</p>
+        </div>
+        <button class="btn btn-primary" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print Report</button>
+      </div>
+
+      <div class="card p-4">
+        <div class="card-heading">Available Report Packages</div>
+        <div class="report-item-row">
+          <div><strong>October 2026 Monthly Incident Summary</strong><div class="text-muted" style="font-size:12px;">12 Incidents • 8 Smoke • 3 Combustible Hazard • 1 Rescue Area</div></div>
+          <button class="btn btn-secondary small" onclick="alert('Downloading October PDF report...')">Download PDF</button>
+        </div>
+        <div class="report-item-row mt-2">
+          <div><strong>Safety Audit &amp; Gas Cylinder Proximity Risk Analysis</strong><div class="text-muted" style="font-size:12px;">Industrial Facility Hazard Zone Assessment</div></div>
+          <button class="btn btn-secondary small" onclick="alert('Downloading Hazard Risk PDF...')">Download PDF</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ──────────────────────────────────────────────────────────
+         PAGE 8: CAMERAS (Multi-Camera Grid)
+    ─────────────────────────────────────────────────────────── -->
+    <div class="page" id="page-cameras">
+      <div class="page-topbar">
+        <div>
+          <h1 class="page-heading">Camera Surveillance Network</h1>
+          <p class="page-subheading">Multi-sensor situational feed across all building zones.</p>
+        </div>
+      </div>
+
+      <div class="camera-quad-grid">
+        <div class="card quad-cam-card">
+          <div class="quad-header"><span class="badge badge-low">ONLINE</span> Camera 1 – Main Hall</div>
+          <div class="quad-screen"><img src="/static/img/yolo_detection.jpg" alt="Cam 1" /></div>
+        </div>
+        <div class="card quad-cam-card">
+          <div class="quad-header"><span class="badge badge-low">ONLINE</span> Camera 2 – Chemical Lab</div>
+          <div class="quad-screen"><div class="quad-standby-placeholder">CAM 2 FEED STANDBY</div></div>
+        </div>
+        <div class="card quad-cam-card">
+          <div class="quad-header"><span class="badge badge-low">ONLINE</span> Camera 3 – Storage Facility</div>
+          <div class="quad-screen"><div class="quad-standby-placeholder">CAM 3 FEED STANDBY</div></div>
+        </div>
+        <div class="card quad-cam-card">
+          <div class="quad-header"><span class="badge badge-low">ONLINE</span> Camera 4 – North Entrance</div>
+          <div class="quad-screen"><div class="quad-standby-placeholder">CAM 4 FEED STANDBY</div></div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ──────────────────────────────────────────────────────────
+         PAGE 9: SETTINGS
+    ─────────────────────────────────────────────────────────── -->
+    <div class="page" id="page-settings">
+      <div class="page-topbar">
+        <div>
+          <h1 class="page-heading">System Settings</h1>
+          <p class="page-subheading">Detector thresholds, camera devices, and operational parameters.</p>
+        </div>
+      </div>
+
+      <div class="card p-4">
+        <div class="card-heading">Detector Parameters</div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Fire Confidence Threshold</div>
+            <div class="settings-desc">Neural YOLOv8 minimum confidence cutoff (0.62)</div>
+          </div>
+          <input type="number" step="0.05" min="0.1" max="0.95" value="0.62" class="settings-input" />
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">People Confidence Threshold</div>
+            <div class="settings-desc">COCO person detection cutoff (0.65)</div>
+          </div>
+          <input type="number" step="0.05" min="0.1" max="0.95" value="0.65" class="settings-input" />
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Temporal Confirmation Window</div>
+            <div class="settings-desc">Consecutive frames required to confirm detection (3 frames)</div>
+          </div>
+          <input type="number" min="1" max="15" value="3" class="settings-input" />
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Smoke Motion / Dispersion Gate</div>
+            <div class="settings-desc">Filters stationary white ceilings and walls via temporal pixel delta</div>
+          </div>
+          <span class="badge badge-low">ACTIVE (3.2 px/s)</span>
+        </div>
+      </div>
+
+      <div class="card p-4 mt-4">
+        <div class="card-heading" style="color:var(--color-warn-low);">Research Prototype Notice</div>
+        <p style="font-size:12px; color:var(--text-muted); line-height:1.7;">
+          FireGuard AI is an academic and research prototype engineered for visual fire situational awareness. It is not certified for primary life safety or rescue confirmation. Absence of detection does not guarantee absence of danger.
+        </p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════════════════════ -->
+<script src="/static/js/socket.io.min.js"></script>
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>

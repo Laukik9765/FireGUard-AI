@@ -1,0 +1,33 @@
+# FireGuard AI — Python Dependencies
+# Target: RTX 3050 Laptop GPU (6 GB VRAM)
+# Python >= 3.10 recommended
+
+# ── Core ML / Vision ─────────────────────────────────────────────────────────
+ultralytics>=8.2.0          # YOLOv8 multi-class object detection
+torch>=2.2.0                # PyTorch (install CUDA-enabled wheel separately)
+torchvision>=0.17.0
+transformers>=4.40.0        # HuggingFace Transformers (LocateAnything backbone)
+accelerate>=0.29.0          # Mixed-precision / device mapping helpers
+bitsandbytes>=0.43.0        # 4-bit / 8-bit quantization on GPU
+einops>=0.7.0               # Tensor manipulation used by vision encoders
+
+# ── Image / Video Processing ──────────────────────────────────────────────────
+opencv-python>=4.9.0.80     # Webcam capture, video I/O, bounding-box drawing
+Pillow>=10.3.0              # Image loading / saving
+numpy>=1.26.0
+
+# ── Dashboard (web UI served locally) ────────────────────────────────────────
+flask>=3.0.0                # Lightweight web server for the dashboard
+flask-socketio>=5.3.6       # Real-time push from backend to browser
+eventlet>=0.35.1            # Async transport for flask-socketio
+
+# ── Utilities ────────────────────────────────────────────────────────────────
+pydantic>=2.7.0             # Typed config / data models
+python-dotenv>=1.0.1        # .env file support
+tqdm>=4.66.0                # Progress bars (video processing)
+loguru>=0.7.2               # Structured logging
+fpdf2>=2.7.0                # PDF report generation
+
+# ── Development / Testing ─────────────────────────────────────────────────────
+pytest>=8.2.0
+pytest-asyncio>=0.23.0

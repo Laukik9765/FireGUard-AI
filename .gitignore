@@ -1,0 +1,44 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environments
+.env
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+.DS_Store
+
+# Outputs generated during runs (keep folder structure)
+outputs/annotated/*
+outputs/reports/*
+!outputs/annotated/.gitkeep
+!outputs/reports/.gitkeep
+
+# Temporary debug images from testing
+crop_feed.jpg
+door_crop.jpg
+door_label.jpg
+greenish_region.jpg
+left_label.jpg
+
+# Graphify backups (keep current graph.json / graph.html / GRAPH_REPORT.md)
+graphify-out/20*

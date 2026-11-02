@@ -1,0 +1,13 @@
+{
+  "event_id": "50bca524",
+  "started_at": "2026-09-27T06:33:44.768060+00:00",
+  "ended_at": null,
+  "peak_hazard": "HIGH",
+  "fire_confirmed": false,
+  "smoke_confirmed": true,
+  "max_people": 0,
+  "max_livestock": 1,
+  "peak_density": 83.0,
+  "frame_count": 37,
+  "closed": false
+}
